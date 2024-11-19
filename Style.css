@@ -1,1 +1,10 @@
-﻿
+﻿.container {
+    border-radius: 1.6em;
+    padding: 0.8em 0;
+}
+
+.form-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+}
