@@ -54,6 +54,37 @@
 <script>
     $(document).ready(function () {
         const api = 'https://api.exchangerate-api.com/v4/latest/USD';
+        let currencyRates = {};
+        $.ajax({
+            url: api,
+            method: 'GET',
+            success: function (data) {
+                currencyRates = data.rates;
+                const $selectedCurrency = $('#selectedCurrency');
+                const $convertibleCurrency = $('#сonvertibleCurrency');
+
+                Object.keys(currencyRates).forEach((currency) => {
+                    $selectedCurrency.append(new Option(currency, currencyRates[currency]));
+                    $convertibleCurrency.append(new Option(currency, currencyRates[currency]));
+                });
+            },
+        });
+
+        function updateConversion() {
+            const selectedRate = parseFloat($('#selectedCurrency').val());
+            const convertRate = parseFloat($('#сonvertibleCurrency').val());
+            const amount = parseFloat($('#selectedCurrency').next('input').val());
+
+            if (!isNaN(selectedRate) && !isNaN(convertRate) && !isNaN(amount)) {
+                const result = (amount / selectedRate) * convertRate;
+                $('#rate').val(`Rate: ${selectedRate.toFixed(2)}`);
+                $('#convertRate').val(`Rate: ${convertRate.toFixed(2)}`);
+                $('#result').val(result.toFixed(2));
+            }
+        }
+
+        $('#selectedCurrency, #сonvertibleCurrency').on('change', updateConversion);
+        $('#selectedCurrency').next('input').on('input', updateConversion);
     });
 </script>
 
